@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arrecife | Administración</title>
+<link rel="icon" href="/logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f7f6;--card:#fff;--text:#16262b;--mut:#5f7075;--teal:#0f5565;--teal-d:#0a3f4c;--teal-s:#e3eff1;--border:#d9e5e7;--ok:#15803d;--ok-s:#dcfce7;--bad:#b91c1c;--bad-s:#fee2e2;--ft:'Playfair Display',serif;--fb:'Inter',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100vh;display:grid;grid-template-columns:240px 1fr}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.side{background:linear-gradient(180deg,var(--teal-d),var(--teal));color:#fff;padding:20px 16px;display:flex;flex-direction:column;gap:18px;position:sticky;top:0;height:100vh}
+.marca{font-family:var(--ft);font-size:22px;letter-spacing:1px}
+.marca small{display:block;font-family:var(--fb);font-size:10px;letter-spacing:3px;color:#bfe0e6;text-transform:uppercase;margin-top:2px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{aspect-ratio:1/1;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:600;text-align:center;padding:6px;transition:.2s}
+.tile .ic{font-size:22px}
+.tile:hover{background:rgba(255,255,255,.16)}
+.tile.on{background:#fff;color:var(--teal-d);border-color:#fff}
+.fin{margin-top:auto}
+.salir{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.4);background:none;color:#fff;font-weight:600;font-size:12px}
+main{padding:28px 32px;min-width:0}
+.cab{margin-bottom:20px}
+.cab h1{font-family:var(--ft);font-size:30px;color:var(--teal-d)}
+.cab p{color:var(--mut);font-size:13px;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px}
+.card h2{font-family:var(--ft);font-size:19px;color:var(--teal-d);margin-bottom:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-top:4px solid var(--teal);border-radius:14px;padding:16px}
+.stat b{font-family:var(--ft);font-size:30px;color:var(--teal-d);display:block}
+.stat span{font-size:11px;color:var(--mut);text-transform:uppercase;font-weight:700;letter-spacing:.5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:7px 13px;border-radius:20px;border:1px solid var(--border);background:#fff;color:var(--teal-d);font-size:12px;font-weight:600}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.lbl{font-size:10px;color:var(--mut);font-weight:700;text-transform:uppercase;display:block;margin:10px 0 4px}
+.fld{width:100%;min-height:42px;border:1px solid var(--border);border-radius:8px;padding:8px 12px;background:#fff;font-size:14px}
+textarea.fld{resize:vertical}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-weight:700;font-size:13px}
+.btn:hover{background:var(--teal-d)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res{display:grid;grid-template-columns:54px 1fr;gap:12px;border:1px solid var(--border);border-left:5px solid var(--bad);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.res.vista{border-left-color:var(--ok);background:#f7fdf9}
+.mesa-b{width:54px;height:54px;border-radius:12px;background:var(--teal-s);color:var(--teal-d);display:grid;place-items:center;font-family:var(--ft);font-size:22px;font-weight:700}
+.res-info{display:flex;flex-direction:column;gap:2px;font-size:13px}
+.res-info span{color:var(--mut);font-size:12px}
+.res-acc{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap}
+.pill{padding:7px 12px;border-radius:20px;border:1px solid var(--teal);background:#fff;color:var(--teal);font-size:12px;font-weight:600;text-decoration:none;display:inline-block}
+.pill.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.pill.bad{border-color:var(--bad);color:var(--bad)}
+.item{display:flex;gap:10px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:8px;margin-bottom:8px;background:#fff}
+.item img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--teal-s)}
+.item .txt{flex:1;min-width:0;font-size:13px}
+.item .txt span{display:block;font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .txt .tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:12px;background:var(--teal-s);color:var(--teal-d);margin-top:3px}
+.x{background:var(--bad-s);color:var(--bad);border:none;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700}
+.horas{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin-top:8px}
+.horas label{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:8px;padding:8px;font-size:13px;cursor:pointer;background:#fff}
+.vacio{color:var(--mut);font-size:13px;text-align:center;padding:24px}
+.prox{border:2px dashed var(--border);border-radius:16px;padding:40px 20px;text-align:center;color:var(--mut);background:#fff;font-size:14px}
+.prox b{font-family:var(--ft);font-size:22px;color:var(--teal-d);display:block;margin-bottom:6px}
+.fila{display:flex;gap:8px;align-items:center}
+.fila .fld{flex:1}
+@media(max-width:760px){
+ body{grid-template-columns:1fr}
+ .side{position:static;height:auto;padding:14px}
+ .marca{font-size:18px}
+ .tiles{display:flex;overflow-x:auto;gap:8px;padding-bottom:4px}
+ .tile{aspect-ratio:auto;min-width:88px;padding:10px 6px}
+ main{padding:18px 14px}
+ .cab h1{font-size:24px}
+ .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<aside class="side">
+ <div class="marca">Arrecife<small>Administración</small></div>
+ <nav class="tiles" id="nav">
+  <button class="tile on" data-s="resumen" onclick="ir('resumen')"><span class="ic">🏠</span>Resumen</button>
+  <button class="tile" data-s="reservas" onclick="ir('reservas')"><span class="ic">📅</span>Reservas</button>
+  <button class="tile" data-s="mesas" onclick="ir('mesas')"><span class="ic">🪑</span>Mesas y horas</button>
+  <button class="tile" data-s="carta" onclick="ir('carta')"><span class="ic">🍽️</span>Carta</button>
+  <button class="tile" data-s="eventos" onclick="ir('eventos')"><span class="ic">🎉</span>Eventos</button>
+  <button class="tile" data-s="ajustes" onclick="ir('ajustes')"><span class="ic">⚙️</span>Ajustes</button>
+ </nav>
+ <div class="fin"><button class="salir" onclick="salir()">Cerrar sesión</button></div>
+</aside>
+
+<main>
+ <section data-sec="resumen">
+  <div class="cab"><h1>Panel de control</h1><p id="fechaHoy"></p></div>
+  <div class="stats">
+   <div class="stat"><b id="stHoy">0</b><span>Reservas hoy</span></div>
+   <div class="stat"><b id="stSin">0</b><span>Sin revisar</span></div>
+   <div class="stat"><b id="stPlatos">0</b><span>Platos</span></div>
+   <div class="stat"><b id="stBebidas">0</b><span>Bebidas y bienvenida</span></div>
+   <div class="stat"><b id="stBloq">0</b><span>Horas bloqueadas</span></div>
+  </div>
+  <div class="card"><h2>Próximas reservas</h2><div id="resumenRes"></div></div>
+ </section>
+
+ <section data-sec="reservas" hidden>
+  <div class="cab"><h1>Reservas</h1><p>Marca “Visto” cuando confirmes la reserva. Así sabes cuáles ya revisaste.</p></div>
+  <div class="chips" id="chipsRes">
+   <button class="chip on" onclick="filtrarRes('proximas',this)">Próximas</button>
+   <button class="chip" onclick="filtrarRes('sinrev',this)">Sin revisar</button>
+   <button class="chip" onclick="filtrarRes('todas',this)">Todas</button>
+  </div>
+  <div id="listaRes"></div>
+ </section>
+
+ <section data-sec="mesas" hidden>
+  <div class="cab"><h1>Mesas y horas</h1><p>Bloquea horas de una mesa para que nadie pueda reservarlas desde la página.</p></div>
+  <div class="card">
+   <h2>Bloquear horas</h2>
+   <div class="grid2">
+    <div><label class="lbl">Mesa</label><select id="mesaBloq" class="fld"><option value="1">Mesa 1</option><option value="2">Mesa 2</option><option value="3">Mesa 3</option><option value="4">Mesa 4</option></select></div>
+    <div><label class="lbl">Fecha</label><input type="date" id="fechaBloq" class="fld"></div>
+   </div>
+   <div class="horas" id="horasBloq"></div>
+   <button class="btn" style="margin-top:12px" onclick="bloquear()">Bloquear horas marcadas</button>
+  </div>
+  <div class="card"><h2>Horas bloqueadas</h2><div id="listaBloq"></div></div>
+ </section>
+
+ <section data-sec="carta" hidden>
+  <div class="cab"><h1>Carta</h1><p>Platos, bebidas y tragos de bienvenida.</p></div>
+  <div class="card">
+   <h2>Agregar a la carta</h2>
+   <label class="lbl">Foto</label><input type="file" id="fotoC" accept="image/*" class="fld">
+   <div class="grid2">
+    <div><label class="lbl">Nombre</label><input id="nomC" class="fld" maxlength="60" placeholder="Ej: Mojito de la casa"></div>
+    <div><label class="lbl">Tipo</label><select id="tipoC" class="fld"><option value="plato">Plato</option><option value="bebida">Bebida</option><option value="bienvenida">Trago de bienvenida</option></select></div>
+   </div>
+   <label class="lbl">Especificaciones / qué incluye</label><textarea id="especC" class="fld" rows="3"></textarea>
+   <button class="btn" style="margin-top:12px" onclick="agregarCarta()">Guardar en la carta</button>
+  </div>
+  <div class="chips" id="chipsCarta">
+   <button class="chip on" onclick="filtrarCarta('todos',this)">Todos</button>
+   <button class="chip" onclick="filtrarCarta('plato',this)">Platos</button>
+   <button class="chip" onclick="filtrarCarta('bebida',this)">Bebidas</button>
+   <button class="chip" onclick="filtrarCarta('bienvenida',this)">Bienvenida</button>
+  </div>
+  <div class="grid2" id="listaCarta"></div>
+ </section>
+
+ <section data-sec="eventos" hidden>
+  <div class="cab"><h1>Eventos</h1><p>Fotos y videos de eventos.</p></div>
+  <div class="prox"><b>Próximamente</b>Aquí vas a poder subir fotos y videos de los eventos. Lo agregamos en el siguiente paso.</div>
+ </section>
+
+ <section data-sec="ajustes" hidden>
+  <div class="cab"><h1>Ajustes</h1><p>Datos que usa la página.</p></div>
+  <div class="card">
+   <h2>WhatsApp del restaurante</h2>
+   <p style="font-size:12px;color:var(--mut)">Número con código de país, sin + (ej: 5356146377). Las reservas se envían a este número.</p>
+   <div class="fila" style="margin-top:10px"><input id="waAdmin" class="fld" placeholder="5356146377"><button class="btn" onclick="guardarWA()">Guardar</button></div>
+  </div>
+ </section>
+</main>
+
+<script>
+const HORAS=["12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"];
+const TIPOS={plato:'Plato',bebida:'Bebida',bienvenida:'Trago de bienvenida'};
+let S={res:[],bloq:[],platos:[],filtroRes:'proximas',filtroCarta:'todos'};
+const $=id=>document.getElementById(id);
+const esc=s=>{const d=document.createElement('div');d.textContent=s??'';return d.innerHTML};
+const hoy=()=>new Date().toLocaleDateString('en-CA',{timeZone:'America/Havana'});
+const vacio=t=>`<p class="vacio">${t}</p>`;
+
+async function api(url,opt){
+ opt=opt||{};
+ const o={method:opt.method||'GET',credentials:'same-origin',headers:{}};
+ if(opt.body!==undefined){o.headers['Content-Type']='application/json';o.body=JSON.stringify(opt.body)}
+ const r=await fetch(url,o);let d={};
+ try{d=await r.json()}catch(e){}
+ if(r.status===401){location.href='/';throw new Error('Sesión vencida')}
+ if(!r.ok){const err=new Error(d.error||'No se pudo completar. Intenta de nuevo.');err.status=r.status;throw err}
+ return d;
+}
+const aviso=e=>{if(e.message!=='Sesión vencida')alert(e.message)};
+
+function ir(s){
+ document.querySelectorAll('#nav .tile').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
+ document.querySelectorAll('[data-sec]').forEach(x=>x.hidden=x.dataset.sec!==s);
+}
+function chips(btn,id){document.querySelectorAll('#'+id+' .chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on')}
+
+function renderTodo(){renderResumen();renderRes();renderBloq();renderCarta()}
+
+function resHTML(r){
+ const tel=(r.telefono||'').replace(/\D/g,'');
+ return `<div class="res ${r.vista?'vista':''}"><div class="mesa-b">${esc(r.mesa)}</div><div class="res-info"><b>${esc(r.nombre)}</b><span>${esc(r.fecha)} · ${esc(r.hora)} · Mesa ${esc(r.mesa)}</span><span>${esc(r.telefono)}</span></div><div class="res-acc"><button class="pill ${r.vista?'ok':''}" onclick="toggleVista(${r.id},${!r.vista})">${r.vista?'✓ Visto':'Marcar visto'}</button>${tel?`<a class="pill" href="https://wa.me/${tel}" target="_blank" rel="noopener">WhatsApp</a>`:''}<button class="pill bad" onclick="cancelar(${r.id})">Cancelar</button></div></div>`;
+}
+
+function renderResumen(){
+ const h=hoy();
+ const proximas=S.res.filter(r=>r.fecha>=h);
+ $('fechaHoy').textContent=new Date().toLocaleDateString('es',{timeZone:'America/Havana',weekday:'long',day:'numeric',month:'long'});
+ $('stHoy').textContent=S.res.filter(r=>r.fecha===h).length;
+ $('stSin').textContent=proximas.filter(r=>!r.vista).length;
+ $('stPlatos').textContent=S.platos.filter(p=>p.tipo==='plato').length;
+ $('stBebidas').textContent=S.platos.filter(p=>p.tipo!=='plato').length;
+ $('stBloq').textContent=S.bloq.length;
+ $('resumenRes').innerHTML=proximas.slice(0,5).map(resHTML).join('')||vacio('No hay reservas próximas');
+}
+
+function renderRes(){
+ const h=hoy();
+ let l=[...S.res];
+ if(S.filtroRes==='proximas') l=l.filter(r=>r.fecha>=h);
+ if(S.filtroRes==='sinrev') l=l.filter(r=>r.fecha>=h&&!r.vista);
+ $('listaRes').innerHTML=l.map(resHTML).join('')||vacio('No hay reservas en esta vista');
+}
+function filtrarRes(f,btn){S.filtroRes=f;chips(btn,'chipsRes');renderRes()}
+async function cargarRes(){S.res=await api('/api/admin/reservas');renderTodo()}
+function toggleVista(id,v){
+ const r=S.res.find(x=>x.id===id); if(!r) return;
+ r.vista=v; renderTodo();
+ api('/api/admin/reservas/'+id+'/vista',{method:'POST',body:{vista:v}}).catch(e=>{r.vista=!v;renderTodo();aviso(e)});
+}
+function cancelar(id){
+ if(!confirm('¿Cancelar esta reserva? La mesa quedará libre a esa hora.'))return;
+ const copia=S.res; S.res=S.res.filter(x=>x.id!==id); renderTodo();
+ api('/api/admin/reservas/'+id,{method:'DELETE'}).catch(e=>{S.res=copia;renderTodo();aviso(e)});
+}
+
+function pintarHoras(){
+ $('horasBloq').innerHTML=HORAS.map(h=>`<label><input type="checkbox" class="hb" value="${h}"> ${h}</label>`).join('');
+ $('fechaBloq').min=hoy();
+}
+function renderBloq(){
+ $('listaBloq').innerHTML=S.bloq.map(b=>`<div class="item"><div class="txt"><b>Mesa ${esc(b.mesa)} · ${esc(b.hora)}</b><span>${esc(b.fecha)}</span></div><button class="x" onclick="quitarBloq('${esc(b.id)}')">Quitar</button></div>`).join('')||vacio('No hay horas bloqueadas');
+}
+async function cargarBloq(){S.bloq=await api('/api/admin/bloqueos');renderTodo()}
+async function bloquear(){
+ const mesa=$('mesaBloq').value, fecha=$('fechaBloq').value;
+ const horas=[...document.querySelectorAll('.hb:checked')].map(c=>c.value);
+ if(!fecha) return alert('Elige la fecha');
+ if(!horas.length) return alert('Marca al menos una hora');
+ try{
+   await api('/api/admin/bloqueos',{method:'POST',body:{mesa,fecha,horas}});
+   document.querySelectorAll('.hb').forEach(c=>c.checked=false);
+   await cargarBloq();
+ }catch(e){aviso(e)}
+}
+function quitarBloq(id){
+ if(!confirm('¿Quitar este bloqueo? La mesa quedará libre a esa hora.'))return;
+ const copia=S.bloq; S.bloq=S.bloq.filter(x=>x.id!==id); renderTodo();
+ api('/api/admin/bloqueos/'+id,{method:'DELETE'}).catch(e=>{S.bloq=copia;renderTodo();aviso(e)});
+}
+
+function renderCarta(){
+ let l=S.platos;
+ if(S.filtroCarta!=='todos') l=l.filter(p=>p.tipo===S.filtroCarta);
+ $('listaCarta').innerHTML=l.map(p=>`<div class="item"><img src="${esc(p.foto)}" alt=""><div class="txt"><b>${esc(p.nombre)}</b><span>${esc(p.espec||'')}</span><span class="tag">${TIPOS[p.tipo]||'Plato'}</span></div><button class="x" onclick="borrarPlato(${p.id})">Borrar</button></div>`).join('')||vacio('Aún no hay elementos en esta vista');
+}
+function filtrarCarta(f,btn){S.filtroCarta=f;chips(btn,'chipsCarta');renderCarta()}
+async function cargarCarta(){S.platos=await api('/api/platos');renderTodo()}
+function comprimir(file,cb){
+ let r=new FileReader();
+ r.onload=e=>{let img=new Image();img.onload=()=>{
+   let max=900,sc=Math.min(1,max/Math.max(img.width,img.height));
+   let c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+   c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.8));
+ };img.onerror=()=>alert('No se pudo leer la imagen');img.src=e.target.result};
+ r.readAsDataURL(file);
+}
+function agregarCarta(){
+ const nombre=$('nomC').value.trim(), tipo=$('tipoC').value, espec=$('especC').value.trim(), file=$('fotoC').files[0];
+ if(!nombre||!file) return alert('Falta el nombre y la foto');
+ comprimir(file, async foto=>{
+   try{
+     await api('/api/admin/platos',{method:'POST',body:{nombre,tipo,espec,foto}});
+     $('nomC').value='';$('especC').value='';$('fotoC').value='';
+     await cargarCarta();
+   }catch(e){aviso(e)}
+ });
+}
+function borrarPlato(id){
+ if(!confirm('¿Borrar este elemento de la carta?'))return;
+ const copia=S.platos; S.platos=S.platos.filter(x=>x.id!==id); renderTodo();
+ api('/api/admin/platos/'+id,{method:'DELETE'}).catch(e=>{S.platos=copia;renderTodo();aviso(e)});
+}
+
+async function cargarWA(){const d=await api('/api/admin/config');$('waAdmin').value=d.whatsapp||''}
+async function guardarWA(){
+ try{await api('/api/admin/config',{method:'POST',body:{whatsapp:$('waAdmin').value.trim()}});await cargarWA();alert('Número guardado')}
+ catch(e){aviso(e)}
+}
+async function salir(){
+ try{await api('/api/admin/logout',{method:'POST'})}catch(e){}
+ location.href='/';
+}
+
+(async function(){
+ pintarHoras();
+ try{await Promise.all([cargarRes(),cargarBloq(),cargarCarta(),cargarWA()])}
+ catch(e){aviso(e)}
+})();
+</script>
+</body>
+</html>
